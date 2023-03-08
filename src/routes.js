@@ -1,7 +1,7 @@
-const { registerUser, login, detailUser } = require('./controllers/users')
+const { registerUser, login, detailUser, updateUser } = require('./controllers/users')
 const { validateAuthentication } = require('./middlewares/validateAuthentication')
 const { validateRequest } = require('./middlewares/validateRequest')
-const { schemaUserRegister, schemaUserLogin } = require('./schemas/schemas')
+const { schemaUserRegister, schemaUserLogin, schemaUpdateUser } = require('./schemas/schemas')
 
 const routes = require('express')()
 
@@ -11,5 +11,6 @@ routes.post('/login', validateRequest(schemaUserLogin), login)
 routes.use(validateAuthentication)
 
 routes.get('/user', detailUser)
+routes.put('/user', validateRequest(schemaUpdateUser), updateUser)
 
 module.exports = { routes }
