@@ -27,6 +27,29 @@ const registerUser = async (req, res) => {
   }
 }
 
+const login = async (req, res) => {
+  const { email, password } = req.body
+
+  try {
+    const user = await knex('users').where({ email }).first()
+    if (!user) return res.status(400).json({ error: { email: 'E-mail inválido' } })
+
+    const validPassword = await bcrypt.compare(password, user.password)
+    if (!validPassword) return res.status(400).json({ error: { password: 'Senha inválida' } })
+
+    const token = jwt.sign({ id: user.id }, '123456', {
+      expiresIn: '1h'
+    })
+
+    const { password: _, ...userData } = user
+
+    return res.status(201).json({ user: userData, token })
+  } catch (error) {
+    return res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
-  registerUser
+  registerUser,
+  login
 }

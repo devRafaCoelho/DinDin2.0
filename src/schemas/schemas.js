@@ -18,6 +18,20 @@ const schemaUserRegister = Joi.object({
   })
 })
 
+const schemaUserLogin = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'O email precisa ser válido',
+    'any.required': 'O email é obrigatório',
+    'string.empty': 'O email é obrigatório'
+  }),
+  password: Joi.string().min(5).required().messages({
+    'any.required': 'A senha é obrigatória',
+    'string.empty': 'A senha é obrigatória',
+    'string.min': 'A senha precisa conter, no mínimo, 5 caracteres'
+  })
+})
+
 module.exports = {
-  schemaUserRegister
+  schemaUserRegister,
+  schemaUserLogin
 }
