@@ -49,7 +49,18 @@ const login = async (req, res) => {
   }
 }
 
+const detailUser = async (req, res) => {
+  const userData = {
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email
+  }
+
+  return res.status(200).json(userData)
+}
+
 module.exports = {
   registerUser,
-  login
+  login,
+  detailUser
 }
