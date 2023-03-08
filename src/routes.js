@@ -1,7 +1,9 @@
+const { registerUser } = require('./controllers/users')
+const { validateRequest } = require('./middlewares/validateRequest')
+const { schemaUserRegister } = require('./schemas/schemas')
+
 const routes = require('express')()
 
-routes.get('/', (req, res) => {
-  return res.status(200).json({ message: 'api ok' })
-})
+routes.post('/register', validateRequest(schemaUserRegister), registerUser)
 
 module.exports = { routes }
