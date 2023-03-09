@@ -114,8 +114,27 @@ const updateTransaction = async (req, res) => {
   }
 }
 
+const deleteTransaction = async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const transaction = await knex('transactions').where('transactions.id', id).first()
+
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transação não encontrada.' })
+    }
+
+    await knex('transactions').where({ id }).del()
+
+    return res.status(204).json({ message: 'Transação deletada com sucesso.' })
+  } catch (error) {
+    return res.status(500).json({ message: error })
+  }
+}
+
 module.exports = {
   registerTransaction,
   detailTransaction,
-  updateTransaction
+  updateTransaction,
+  deleteTransaction
 }
