@@ -1,5 +1,4 @@
 const { knex } = require('../config/db')
-const { formatedValue } = require('../utils/format')
 
 const registerTransaction = async (req, res) => {
   const { type, value, date, description, categorie_id } = req.body
@@ -18,6 +17,15 @@ const registerTransaction = async (req, res) => {
       return res.status(400).json({
         error: {
           type: 'O campo tipo é obrigatório e deve ser definido como entrada ou saída.'
+        }
+      })
+    }
+
+    const categoryExists = await knex('categories').select('*').where('id', categorie_id).first()
+    if (!categoryExists) {
+      return res.status(400).json({
+        error: {
+          categorie_id: 'Nenhuma categoria encontrada.'
         }
       })
     }
