@@ -51,8 +51,35 @@ const schemaUpdateUser = Joi.object({
   })
 })
 
+const schemaTransaction = Joi.object({
+  type: Joi.string().required().messages({
+    'any.required': 'A categoria é obrigatória',
+    'string.empty': 'A categoria é obrigatória'
+  }),
+  value: Joi.number().required().messages({
+    'any.required': 'O valor da cobrança é obrigatório',
+    'number.base': 'O valor da cobrança precisa ser um número'
+  }),
+  date: Joi.date().iso().required().messages({
+    'date.format': 'Data inválida',
+    'any.required': 'A data de vencimento é obrigatória',
+    'number.empty': 'O valor da data é obrigatório',
+    'number.base': 'O valor da data precisa ser um número'
+  }),
+  description: Joi.string().max(500).required().messages({
+    'string.max': 'A descrição precisa conter, no máximo, 500 caracteres',
+    'any.required': 'A descrição é obrigatória',
+    'string.empty': 'A descrição é obrigatória'
+  }),
+  categorie_id: Joi.string().required().messages({
+    'any.required': 'A categoria é obrigatória',
+    'string.empty': 'A categoria é obrigatória'
+  })
+})
+
 module.exports = {
   schemaUserRegister,
   schemaUserLogin,
-  schemaUpdateUser
+  schemaUpdateUser,
+  schemaTransaction
 }
