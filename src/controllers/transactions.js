@@ -14,7 +14,7 @@ const registerTransaction = async (req, res) => {
   }
 
   try {
-    if (!type || (type !== 'entrada' && type !== 'saida')) {
+    if (!type || !['entrada', 'saida'].includes(type)) {
       return res.status(400).json({
         error: {
           type: 'O campo tipo é obrigatório e deve ser definido como entrada ou saída.'
