@@ -2,7 +2,8 @@ const {
   registerTransaction,
   detailTransaction,
   updateTransaction,
-  deleteTransaction
+  deleteTransaction,
+  listTransactions
 } = require('./controllers/transactions')
 const { registerUser, login, detailUser, updateUser } = require('./controllers/users')
 const { validateAuthentication } = require('./middlewares/validateAuthentication')
@@ -28,5 +29,6 @@ routes.post('/transaction', validateRequest(schemaTransaction), registerTransact
 routes.get('/transaction/:id', detailTransaction)
 routes.put('/transaction/:id', validateRequest(schemaTransaction), updateTransaction)
 routes.delete('/transaction/:id', deleteTransaction)
+routes.get('/transaction', listTransactions)
 
 module.exports = { routes }

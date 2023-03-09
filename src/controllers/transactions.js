@@ -61,7 +61,7 @@ const detailTransaction = async (req, res) => {
     }
 
     const data = {
-      transactionId: transaction.id,
+      id: transaction.id,
       description: transaction.description,
       value: formatedValue(transaction.value),
       date: formatedDate(transaction.date),
@@ -132,9 +132,54 @@ const deleteTransaction = async (req, res) => {
   }
 }
 
+const listTransactions = async (req, res) => {
+  const { categorie_id, order } = req.query
+
+  try {
+    const transactions = await knex('transactions').select(
+      'transactions.id',
+      'transactions.description',
+      'transactions.value',
+      'transactions.date',
+      'transactions.categorie_id',
+      'transactions.user_id',
+      'transactions.type'
+    )
+
+    const allTransactions = transactions.map((transaction) => {
+      return {
+        id: transaction.id,
+        description: transaction.description,
+        value: formatedValue(transaction.value),
+        date: formatedDate(transaction.date),
+        categorie_id: transaction.categorie_id,
+        user_id: transaction.user_id,
+        type: transaction.type
+      }
+    })
+
+    let filteredTransactions = allTransactions
+
+    if (categorie_id) {
+      filteredTransactions = filteredTransactions.filter(
+        (transaction) => transaction.categorie_id.toString() === categorie_id.toString()
+      )
+    }
+
+    if (filteredTransactions.length === 0) {
+      return res.status(400).json({ error: { list: 'Nenhuma transação encontrada' } })
+    } else {
+      return res.status(200).json(filteredTransactions)
+    }
+  } catch (error) {
+    return res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
   registerTransaction,
   detailTransaction,
   updateTransaction,
-  deleteTransaction
+  deleteTransaction,
+  listTransactions
 }
