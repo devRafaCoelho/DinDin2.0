@@ -1,4 +1,5 @@
 const { listCategories } = require('./controllers/categories')
+const { resume } = require('./controllers/resume')
 const {
   registerTransaction,
   detailTransaction,
@@ -33,5 +34,7 @@ routes.get('/transaction/:id', detailTransaction)
 routes.put('/transaction/:id', validateRequest(schemaTransaction), updateTransaction)
 routes.delete('/transaction/:id', deleteTransaction)
 routes.get('/transaction', listTransactions)
+
+routes.get('/resume', resume)
 
 module.exports = { routes }
