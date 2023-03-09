@@ -90,6 +90,9 @@ const updateTransaction = async (req, res) => {
   }
 
   try {
+    const transaction = await knex('transactions').where({ id }).first()
+    if (!transaction) return res.status(404).json({ message: 'Transação não encontrada' })
+
     if (!type || !['entrada', 'saida'].includes(type)) {
       return res.status(400).json({
         error: {
@@ -164,6 +167,19 @@ const listTransactions = async (req, res) => {
       filteredTransactions = filteredTransactions.filter(
         (transaction) => transaction.categorie_id.toString() === categorie_id.toString()
       )
+    }
+
+    if (order) {
+      filteredTransactions.sort((a, b) => {
+        const dateA = new Date(a.date)
+        const dateB = new Date(b.date)
+
+        if (order === 'asc') {
+          return dateA - dateB
+        } else if (order === 'desc') {
+          return dateB - dateA
+        }
+      })
     }
 
     if (filteredTransactions.length === 0) {

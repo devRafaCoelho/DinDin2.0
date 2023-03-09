@@ -1,3 +1,4 @@
+const { listCategories } = require('./controllers/categories')
 const {
   registerTransaction,
   detailTransaction,
@@ -24,6 +25,8 @@ routes.use(validateAuthentication)
 
 routes.get('/user', detailUser)
 routes.put('/user', validateRequest(schemaUpdateUser), updateUser)
+
+routes.get('/categorie', listCategories)
 
 routes.post('/transaction', validateRequest(schemaTransaction), registerTransaction)
 routes.get('/transaction/:id', detailTransaction)
