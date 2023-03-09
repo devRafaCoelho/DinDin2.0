@@ -61,7 +61,7 @@ const detailTransaction = async (req, res) => {
     }
 
     const data = {
-      transactionId: transaction.id,
+      id: transaction.id,
       description: transaction.description,
       value: formatedValue(transaction.value),
       date: formatedDate(transaction.date),
@@ -114,8 +114,72 @@ const updateTransaction = async (req, res) => {
   }
 }
 
+const deleteTransaction = async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const transaction = await knex('transactions').where('transactions.id', id).first()
+
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transação não encontrada.' })
+    }
+
+    await knex('transactions').where({ id }).del()
+
+    return res.status(204).json({ message: 'Transação deletada com sucesso.' })
+  } catch (error) {
+    return res.status(500).json({ message: error })
+  }
+}
+
+const listTransactions = async (req, res) => {
+  const { categorie_id, order } = req.query
+
+  try {
+    const transactions = await knex('transactions').select(
+      'transactions.id',
+      'transactions.description',
+      'transactions.value',
+      'transactions.date',
+      'transactions.categorie_id',
+      'transactions.user_id',
+      'transactions.type'
+    )
+
+    const allTransactions = transactions.map((transaction) => {
+      return {
+        id: transaction.id,
+        description: transaction.description,
+        value: formatedValue(transaction.value),
+        date: formatedDate(transaction.date),
+        categorie_id: transaction.categorie_id,
+        user_id: transaction.user_id,
+        type: transaction.type
+      }
+    })
+
+    let filteredTransactions = allTransactions
+
+    if (categorie_id) {
+      filteredTransactions = filteredTransactions.filter(
+        (transaction) => transaction.categorie_id.toString() === categorie_id.toString()
+      )
+    }
+
+    if (filteredTransactions.length === 0) {
+      return res.status(400).json({ error: { list: 'Nenhuma transação encontrada' } })
+    } else {
+      return res.status(200).json(filteredTransactions)
+    }
+  } catch (error) {
+    return res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
   registerTransaction,
   detailTransaction,
-  updateTransaction
+  updateTransaction,
+  deleteTransaction,
+  listTransactions
 }
