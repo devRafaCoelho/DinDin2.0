@@ -1,31 +1,31 @@
 CREATE DATABASE dindin
 
-CREATE TABLE usuarios(
+CREATE TABLE users(
 	id serial primary key,
-  	nome text not null,
-  	email varchar(100) not null unique,
-  	senha text not null
+  name text not null,
+  email varchar(100) not null unique,
+  password text not null
 );
 
-CREATE TABLE categorias(
+CREATE TABLE categories(
 	id serial primary key,
-  descricao text not null
+  description text not null
 );
 
-CREATE TABLE transacoes(
+CREATE TABLE transactions(
 	id serial primary key,
- 	descricao text,
-	valor numeric check(valor > 0) not null,
-	data date default now(),
-	categoria_id integer not null,
-	usuario_id integer not null,
-	tipo text not null,
+ 	description text,
+	value numeric check(value > 0) not null,
+	date date default now(),
+	categorie_id integer not null,
+	user_id integer not null,
+	type text not null,
 
-  	FOREIGN KEY (categoria_id) references categorias(id),
-  	FOREIGN KEY (usuario_id) references usuarios(id)
+  FOREIGN KEY (categorie_id) references categories(id),
+  FOREIGN KEY (user_id) references users(id)
 );
 
-INSERT INTO categorias(descricao)
+INSERT INTO categories(description)
 values
 
 ('Alimentação'),
