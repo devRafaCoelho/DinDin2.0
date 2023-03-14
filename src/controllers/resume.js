@@ -16,8 +16,7 @@ async function resume(req, res) {
 
     return res.status(200).json(data)
   } catch (error) {
-    console.error(error)
-    res.status(500).send('Erro ao buscar dados das transações')
+    return res.status(400).json({ message: error.message })
   }
 }
 

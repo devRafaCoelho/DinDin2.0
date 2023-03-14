@@ -9,7 +9,7 @@ const validateAuthentication = async (req, res, next) => {
   const token = authorization.substring(7).trim()
 
   try {
-    const { id } = jwt.verify(token, '123456')
+    const { id } = jwt.verify(token, process.env.DB_PASSWORD)
 
     const loggedUser = await knex('users').where({ id }).first()
     if (!loggedUser) return res.status(401).json({ message: 'Não autorizado' })

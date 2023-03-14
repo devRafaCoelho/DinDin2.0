@@ -8,6 +8,6 @@ app.use(cors())
 app.use(express.json())
 app.use(routes)
 
-app.listen(8000, () => {
-  console.log(`API connected on port 8000`)
+app.listen(process.env.API_PORT, () => {
+  console.log(`API connected on port ${process.env.API_PORT}`)
 })
